@@ -1,0 +1,8 @@
+Ball1.png
+Ball2.png
+Ball3.png
+Kon.png
+Kosz.png
+Kubek.png
+Tort.png
+Telefon.png

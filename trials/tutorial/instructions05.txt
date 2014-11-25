@@ -1,0 +1,1 @@
+﻿Przesuwasz obiekty „klikając” na nie kursorem i trzymając wciśnięty klawisz myszy „przeciągając” je w nowe miejsce. Proszę przesuń teraz misia o dwie półki na prawo.

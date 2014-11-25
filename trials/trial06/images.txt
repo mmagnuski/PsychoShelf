@@ -1,0 +1,8 @@
+Doll2_mala.png
+Doll3_srednia.png
+Doll4_duza.png
+Gramofon.png
+Tort.png
+Telefon.png
+Insekt.png
+Konewka.png

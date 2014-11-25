@@ -1,0 +1,1 @@
+﻿Osoba stojąca po drugiej stronie szafy nie widzi tych obiektów, które stoją na półkach z wypełnieniem (tylną ścianką). Za chwilę zobaczysz jak wyglądałaby ta szafa z perspektywy osoby stojącej po drugiej stronie.

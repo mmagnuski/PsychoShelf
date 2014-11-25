@@ -1,0 +1,2 @@
+﻿Bardzo dobrze. We właściwym badaniu polecenie wydawane przez osobę będzie widoczne na ekranie tylko przez kilka sekund - musisz je zapamiętać.
+Po zniknięciu polecenia pojawiać się będzie prośba o przeniesienie kursora myszy w miejsce, w którym widoczna jest kropka. Musisz utrzymać kursor na kropce przez chwilę (aż skończy się odliczanie) - dopiero wtedy pojawi się szafa i będzie można wykonać polecenie osoby badanej.

@@ -1,0 +1,1 @@
+﻿Osoba stojąca po drugiej stronie będzie Cię prosić o przesunięcie jednego z obiektów z jednej półki na inną. Wydając Ci instrukcje będzie przyjmowała twoją perspektywę w odniesieniu do kierunków, więc prośba „Przesuń piłkę o dwie półki w prawo” oznacza konieczność przesunięcia piłki o dwie półki w Twoją prawą stronę.
