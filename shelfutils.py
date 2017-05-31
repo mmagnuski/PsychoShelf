@@ -4,13 +4,8 @@ from psychopy import visual, event, core, gui
 import codecs, os
 import numpy as np
 
-# TODOs:
-# [ ] - add orderPresented to dataframe
-# [ ] - handle trial type (how?) 
-# [ ] - choosing avatar       ??
-# [ ] - choosing avatar name  ??
-
 # note:
+# -----
 # getting box indices for image 2 on ImgList:
 # idx = ImgList[1].inbox.idx
 #
@@ -39,7 +34,7 @@ class DragImList:
 
 		# set passed attribures
 		for name, value in kwargs.items():
-			setattr(self, name, value)	
+			setattr(self, name, value)
 
 		self.img = []
 		for im in imlist:
@@ -49,7 +44,7 @@ class DragImList:
 					shelf = self.shelf,
 					image = im
 					))
-	
+
 	def contains(self, obj):
 
 		# returns first image that contains
@@ -57,7 +52,7 @@ class DragImList:
 			if im.contains(obj):
 				return im
 		return []
-	
+
 	def give_dragged(self):
 		for im in self.img:
 			if im.drag:
@@ -74,6 +69,7 @@ class DragImList:
 # class dragIm
 class DragIm:
 
+	# this should be better in __init__
 	win   = []
 	image = []
 	im    = []
@@ -94,13 +90,13 @@ class DragIm:
 			setattr(self, name, value)
 
 		self.im = visual.ImageStim(self.win, image = self.image)
-		
+
 		# update box as to what image it holds:
 		if self.inbox:
 			self.inbox.hasim = self.im
 
 	def place_in_box(self, box):
-		
+
 		# only if given box is empty?
 
 		if self.inbox:
@@ -110,9 +106,9 @@ class DragIm:
 
 		# set position
 		sz = self.im.size
-		middlelim = np.mean(np.dstack((box.frontlim, box.backlim)), 
+		middlelim = np.mean(np.dstack((box.frontlim, box.backlim)),
 			axis = 2, dtype = int)
-		self.im.pos = [np.mean(middlelim[:,0], dtype = int), 
+		self.im.pos = [np.mean(middlelim[:,0], dtype = int),
 					   box.frontlim[0,1] + sz[1]/2]
 		# print 'New position:', self.im.pos
 		# print 'placed in box', box.idx
@@ -134,7 +130,7 @@ class DragIm:
 	def drop(self):
 
 		# get time
-		if self.timer: 
+		if self.timer:
 			self.pick2DropTime = self.timer.getTime()
 
 		# get box and place in box:
@@ -177,7 +173,6 @@ class Shelf:
 	where_covers = 'back'
 
 	# boxContains ? (should be in box class probably) - what image is there
-
 	# whichBox -> transforms x, y pos to box reference or None if no such box
 
 	def __init__(self, **kwargs):
@@ -230,17 +225,10 @@ class Shelf:
 				cvr = self.cover_matrix[r,c]
 
 				row.append(
-					Box(
-						h = self.h, 
-						w = self.w,
-						win = self.win, 
-						left_corner = lc, 
-						create_sides = drw,
-						idx = [r, c],
-						hascover = cvr,
-						cover_side = self.where_covers,
-						drawOrder = self.drawOrder
-						)
+					Box(h = self.h, w = self.w, win = self.win,
+						left_corner = lc, create_sides = drw, idx = [r, c],
+						hascover = cvr, cover_side = self.where_covers,
+						drawOrder = self.drawOrder)
 					)
 
 			self.boxes.append(row)
@@ -254,7 +242,7 @@ class Shelf:
 
 		for row in self.boxes:
 			for i in idx:
-				row[i].draw()	
+				row[i].draw()
 
 
 	def box_from_pos(self, pos):
@@ -262,11 +250,11 @@ class Shelf:
 		for row in self.boxes:
 			for box in row:
 
-				if box.frontlim[0,0] <= pos[0] and \
-				   box.frontlim[1,0] >= pos[0] and \
-				   box.frontlim[0,1] <= pos[1] and \
-				   box.frontlim[1,1] >= pos[1]:
-				   return box
+				if (box.frontlim[0,0] <= pos[0] and
+					box.frontlim[1,0] >= pos[0] and
+					box.frontlim[0,1] <= pos[1] and
+					box.frontlim[1,1] >= pos[1]):
+					return box
 		return []
 
 
@@ -308,17 +296,14 @@ class Box:
 	h = [20, 100]
 	w = [40, 100]
 	left_corner = [100, 100]
-	
+
 	vert  = []
 	shape = []
-	fillcolor = [[153, 102, 0], 
-				 [204, 153, 0], 
-				 [153, 102, 0], 
-				 [204, 153, 0]]
+	fillcolor = [[153, 102, 0], [204, 153, 0], [153, 102, 0], [204, 153, 0]]
 	create_sides = [True, True, True, True]
 	drawOrder = [0, 1, 2, 3]
 	frontlim = [] # [xmin, xmax; ymin, ymax]
-	backlim = [] 
+	backlim = []
 
 	hascover = False
 	cover_shape = []
@@ -336,8 +321,8 @@ class Box:
 		self.backlim = \
 			self.left_corner + \
 			np.array([
-				[0, 0], 
-				[self.w[1], self.h[1] ] 
+				[0, 0],
+				[self.w[1], self.h[1] ]
 				])
 
 		self.frontlim = self.backlim - [self.w[0], self.h[0]]
@@ -356,19 +341,19 @@ class Box:
 			[-self.w[0], self.h[1] - self.h[0]],
 			[-self.w[0], -self.h[0]]
 			])
-		
+
 		self.chng[1] = np.array([
 			[0, 0],
 			[self.w[1], 0],
 			[self.w[1] - self.w[0], -self.h[0]],
 			[-self.w[0], -self.h[0]]
 			])
-		
+
 		self.chng[2] = self.chng[0] + [self.w[1], 0]
 		self.chng[3] = self.chng[1] + [0, self.h[1]]
 
 	def _createshapes(self):
-		
+
 		# sds - which sides to draw
 		sds, = np.nonzero(self.create_sides)
 		self.vert = []
@@ -380,11 +365,11 @@ class Box:
 		for i, v in zip(sds, self.vert):
 			self.shape.append(
 				visual.ShapeStim(
-					self.win, 
-					lineWidth  = 1.5, 
-					fillColor  = rgb2psych(self.fillcolor[i]), 
-					lineColor  = [-1, -1, -1], 
-					vertices   = v, 
+					self.win,
+					lineWidth  = 1.5,
+					fillColor  = rgb2psych(self.fillcolor[i]),
+					lineColor  = [-1, -1, -1],
+					vertices   = v,
 					closeShape = True  ))
 
 		# if we need to draw cover
@@ -398,11 +383,11 @@ class Box:
 				])
 
 			self.cover_shape = visual.ShapeStim(
-					self.win, 
-					lineWidth  = 1.5, 
-					fillColor  = rgb2psych(self.cover_fillcolor), 
-					lineColor  = [-1, -1, -1], 
-					vertices   = cov_vert, 
+					self.win,
+					lineWidth  = 1.5,
+					fillColor  = rgb2psych(self.cover_fillcolor),
+					lineColor  = [-1, -1, -1],
+					vertices   = cov_vert,
 					closeShape = True  )
 
 
@@ -601,9 +586,9 @@ def add_fname(trial):
 	ims = ['img_list', 'back_im']
 	for k in ims:
 		for i in range(len(trial[k])):
-			trial[k][i] = os.path.join('images', 
+			trial[k][i] = os.path.join('images',
 				trial[k][i])
-	trial['correctImage'] = os.path.join('images', 
+	trial['correctImage'] = os.path.join('images',
 		trial['correctImage'])
 
 def run_trial(trial, exp, win, mouse, db):
@@ -618,32 +603,25 @@ def run_trial(trial, exp, win, mouse, db):
 	# we want to add background to instructions
 	instrback = addback(win, instr)
 	bckg = addgeomback(win, bckg)
-	
+
 	# get middle shelf pos:
 	midpos = shelf.boxes[2][2].frontlim
 	midpos = [midpos[0,0], midpos[0,1]]
 
 	# create dot
-	dot = visual.Circle(win, 
-		radius = 20,
-		edges = 32,
-		pos = midpos,
-		fillColor = [-0.7, -0.7, -0.7])
+	dot = visual.Circle(win, radius = 20, edges = 32, pos = midpos,
+						fillColor = [-0.7, -0.7, -0.7])
 
 	# countdown obj:
-	countdown = visual.TextStim(
-		win, 
-		text = '3', 
-		pos = midpos,
-		height = 20,
-		color = [0.5, 0.5, 0.5])
+	countdown = visual.TextStim(win, text = '3', pos = midpos, height = 20,
+								color = [0.5, 0.5, 0.5])
 
 	# do not hide mouse
 	win.setMouseVisible(True)
 
 	# 1. draw backim and instructions
 	timer = core.CountdownTimer(trial['instructionTime'])
-		
+
 	while timer.getTime() > 0:
 		for b in bckg:
 			b.draw()
@@ -652,11 +630,11 @@ def run_trial(trial, exp, win, mouse, db):
 		instrback.draw()
 		instr.draw()
 
-		# flip the window hooray
+		# flip the window
 		win.flip()
 
 
-	# show mouse 
+	# show mouse
 	win.setMouseVisible(True)
 	# mouse.setPos(newPos = [0, 0])
 
@@ -667,10 +645,8 @@ def run_trial(trial, exp, win, mouse, db):
 		notOnDot = not testMousePos(mouse, midpos, 15)
 
 		if notOnDot:
-			for b in bckg:
-				b.draw()
-			instr.draw()
-			dot.draw()
+			for obj in bckg + [instr, dot]:
+				obj.draw()
 			win.flip()
 
 	keepOnDot = False
@@ -681,20 +657,17 @@ def run_trial(trial, exp, win, mouse, db):
 			countdown.setText(str(i))
 
 			while timer.getTime() > 0:
-				
+
 				# draw
-				for b in bckg:
-					b.draw()
-				instr.draw()
-				dot.draw()
-				countdown.draw()
+				for obj in bckg + [instr, dot, countdown]:
+					obj.draw()
 				win.flip()
 
 				# test if on dot
 				keepOnDot = testMousePos(mouse, midpos, 15)
 				if not keepOnDot:
 					break
-		
+
 			if not keepOnDot:
 				break
 
@@ -708,7 +681,7 @@ def run_trial(trial, exp, win, mouse, db):
 
 		# handle quit keypresses
 		for key in event.getKeys():
-			if key in ['escape','q']:
+			if key in ['escape', 'q']:
 				core.quit()
 
 		m1, m2, m3 = mouse.getPressed()
@@ -719,7 +692,6 @@ def run_trial(trial, exp, win, mouse, db):
 			im = imgs.contains(mouse)
 
 			# diagnostics0(imgs, im, shelf)
-
 			if im:
 				im.click_drag(mouse, timer = tmr)
 
@@ -732,7 +704,7 @@ def run_trial(trial, exp, win, mouse, db):
 
 			# finish trials
 			runTrial = False;
-			
+
 			# wasdragged = dragged
 			# dragged = []
 			# diagnostics(dragged, shelf)
@@ -741,7 +713,7 @@ def run_trial(trial, exp, win, mouse, db):
 		drawstims(bckg, shelf, dragged, win)
 
 	# database is written to disc after every trial
-	outfl = os.path.join(exp['pth'], 'behdata', exp['participant'] + '.xls')
+	outfl = os.path.join(exp['pth'], 'behdata', exp['participant'] + '.xlsx')
 	db.to_excel( outfl )
 
 
@@ -757,25 +729,18 @@ def run_tutorial(trial, exp, win, mouse):
 	shelf, imgs, bckg, instr = createstims(win, trial)
 	# we want to add background to instructions
 	bckg = addgeomback(win, bckg)
-	
+
 	# get middle shelf pos:
 	midpos = shelf.boxes[2][2].frontlim
 	midpos = [midpos[0,0], midpos[0,1]]
 
 	# create dot
-	dot = visual.Circle(win, 
-		radius = 20,
-		edges = 32,
-		pos = midpos,
-		fillColor = [-0.7, -0.7, -0.7])
+	dot = visual.Circle(win, radius = 20, edges = 32, pos = midpos,
+						fillColor = [-0.7, -0.7, -0.7])
 
 	# countdown obj:
-	countdown = visual.TextStim(
-		win, 
-		text = '3', 
-		pos = midpos,
-		height = 20,
-		color = [0.5, 0.5, 0.5])
+	countdown = visual.TextStim(win, text = '3', pos = midpos, height = 20,
+								color = [0.5, 0.5, 0.5])
 
 	# do not hide mouse
 	win.setMouseVisible(True)
@@ -789,11 +754,11 @@ def run_tutorial(trial, exp, win, mouse):
 		# setup
 		timer = core.CountdownTimer(1.5)
 		instr.setText(trial['instruct' + str(i)])
+		orig_inst_pos = instr.pos
 		instrback = addback(win, instr, op = 0.7)
-		
+
 		while True:
-			drawstims(bckg, shelf, dragged, 
-				win, noflip = True)
+			drawstims(bckg, shelf, dragged, win, noflip = True)
 			instrback.draw()
 			instr.draw()
 			win.flip()
@@ -808,9 +773,8 @@ def run_tutorial(trial, exp, win, mouse):
 
 	# get other view
 	trial2 = flip_shelf(trial)
-	shelf2, imgs2, b, instr = createstims(
-		win, trial2, rev_shelf = True,
-		lc = [-250, -250])
+	shelf2, imgs2, b, instr = createstims(win, trial2, rev_shelf = True,
+										  lc = [-250, -250])
 
 	# put images to boxes
 	for i, im in zip(trial2['pos_list'], imgs2):
@@ -819,22 +783,15 @@ def run_tutorial(trial, exp, win, mouse):
 
 	# get back for instructions
 	instrback = addback(win, instr, op = 0.7)
-	
+
 	# new geom back
 	bckg2 = []
-	bckg2 = addgeomback(
-		win, bckg2, 
-		prop = 1,
-		start = [410, -250], 
-		xchng = -200,
-		inv = True)
-		
+	bckg2 = addgeomback(win, bckg2, prop = 1,start = [410, -250], xchng = -200,
+						inv = True)
+
 	while True:
-		for b in bckg2:
-			b.draw()
-		shelf2.draw()
-		instrback.draw()
-		instr.draw()
+		for obj in bckg2 + [shelf2, instrback, instr]:
+			obj.draw()
 		win.flip()
 
 		m1, m2, m3 = mouse.getPressed()
@@ -909,7 +866,7 @@ def run_tutorial(trial, exp, win, mouse):
 
 				# finish trials
 				runTrial = False;
-				
+
 				# wasdragged = dragged
 				# dragged = []
 				# diagnostics(dragged, shelf)
@@ -959,31 +916,19 @@ def run_tutorial(trial, exp, win, mouse):
 					break
 
 
-def createstims(win, trial, lc = [-300, -250], \
-	rev_shelf = False):
-	
+def createstims(win, trial, lc=[-300, -250], rev_shelf=False):
+	screen_size = win.size
+
 	# create shelf
 	if not rev_shelf:
-		shelf = Shelf(
-			win = win, 
-			left_corner = lc,
-			which_covered = trial['cov'])
+		shelf = Shelf(win=win, left_corner=lc, which_covered=trial['cov'])
 	else:
-		shelf = Shelf(
-			win = win, 
-			h = [20, 100],
-			w = [-20, 100],
-			left_corner = lc,
-			drawFromLeft = False,
-			drawOrder = [2, 0, 1, 3],
-			which_covered = trial['cov'],
-			where_covers = 'front')
+		shelf = Shelf(win=win, h=[20, 100], w=[-20, 100], left_corner=lc,
+					  drawFromLeft=False, drawOrder=[2, 0, 1, 3],
+					  which_covered=trial['cov'], where_covers='front')
 
 	# create images:
-	imgs = DragImList(
-		trial['img_list'], 
-		win = win, 
-		shelf = shelf)
+	imgs = DragImList(trial['img_list'], win=win, shelf=shelf)
 
 	# create text object:
 	instr = visual.TextStim(
@@ -995,11 +940,7 @@ def createstims(win, trial, lc = [-300, -250], \
 	# create backgroud image:
 	bckg  = []
 	for im, pos in zip(trial['back_im'], trial['back_im_pos']):
-		bckg.append(
-			visual.ImageStim(
-				win, 
-				image = im,
-				pos = pos))
+		bckg.append(visual.ImageStim(win, image=im, pos=pos))
 
 	# put images in respective boxes:
 	for i, im in zip(trial['pos_list'], imgs):
@@ -1021,7 +962,7 @@ def drawstims(bckg, shelf, dragged, win, noflip = False):
 	if dragged:
 		dragged.draw()
 
-	# flip the window hooray
+	# flip the window
 	if not noflip:
 		win.flip()
 
@@ -1029,8 +970,8 @@ def testMousePos(mouse, pos, tol):
 	# get mouse position
 	mpos = mouse.getPos()
 	# test with respect to goal position
-	if np.abs(mpos[0] - pos[0]) <= tol and \
-		np.abs(mpos[1] - pos[1]) <= tol:
+	if (np.abs(mpos[0] - pos[0]) <= tol and
+		np.abs(mpos[1] - pos[1]) <= tol):
 		return True
 	else:
 		return False
@@ -1063,43 +1004,30 @@ def addgeomback(win, bckg, prop = 0.5,
 	ychng = int(xchng * prop * (sgn * -1))
 	topnt = [start[0] + xchng, start[1] + ychng]
 
-	vert = [start, 
-			topnt,
-			[start[0]*-1, topnt[1]], 
-			[start[0]*-1, start[1]],
-			[start[0]*-1, screenlim[1]*-1], 
-			[start[0], screenlim[1]*-1]]
+	vert = [start, topnt,
+			[start[0] * -1, topnt[1]],
+			[start[0] * -1, start[1]],
+			[start[0] * -1, screenlim[1] * -1],
+			[start[0], screenlim[1] * -1]]
 	floor_col = rgb2psych([158, 191, 113])
 	# create shape
-	newbckg.append(
-		shape(win, vert, floor_col)
-		)
+	newbckg.append(shape(win, vert, floor_col))
 
 	# left wall
-	vert = [start, 
-			topnt,
-			[topnt[0], screenlim[1]], 
-			[screenlim[0]*sgn, screenlim[1]]]
+	vert = [start, topnt, [topnt[0], screenlim[1]],
+			[screenlim[0] * sgn, screenlim[1]]]
 	wall_col = rgb2psych([178, 178, 178])
 	# create shape
-	newbckg.append(
-		shape(win, vert, wall_col)
-		)
+	newbckg.append(shape(win, vert, wall_col))
 
 	return newbckg + bckg
 
 def shape(win, vert, col, lw = 1.5, op = 1):
-	return visual.ShapeStim(
-		win,
-		lineWidth  = lw, 
-		vertices   = vert, 
-		fillColor  = col, 
-		lineColor  = [-1, -1, -1], 
-		closeShape = True,
-		opacity    = op  
-		)
+	return visual.ShapeStim(win, lineWidth=lw, vertices=vert, fillColor=col,
+							lineColor=[-1, -1, -1], closeShape=True,
+							opacity=op)
 
-def addback(win, instr, lim = 15, op = 0.5):
+def addback(win, instr, lim=15, op=0.5):
 	# get instr position
 	pos = instr.pos
 
@@ -1111,19 +1039,19 @@ def addback(win, instr, lim = 15, op = 0.5):
 		pos[1] = pos[1] + dst
 		instr.setPos(pos)
 
-	lims = pos + np.array([[-w,-h], [-w,h], [w,h], [w,-h]]) 
-	return shape(win, lims, [-0.5, -0.5, -0.5], op = op)
+	lims = pos + np.array([[-w, -h], [-w, h], [w, h], [w, -h]])
+	return shape(win, lims, [-0.5, -0.5, -0.5], op=op)
 
 
 def fillz(val, num):
     '''fillz(val, num)
     adds zero to the beginning of val so that length of
     val is equal to num. val can be string, int or float'''
-    
+
     # if not string - turn to a string
     if not isinstance(val, basestring):
         val = str(val)
-     
+
     # add zeros
     ln = len(val)
     if ln < num:
@@ -1131,8 +1059,8 @@ def fillz(val, num):
     else:
         return val
 
-def diagnostics(im, shelf):
 
+def diagnostics(im, shelf):
 	print 'Dropped image is in box', im.inbox.idx
 	print '(should be in [1, 1])'
 	print 'This box is:', im.inbox
@@ -1152,6 +1080,7 @@ def diagnostics(im, shelf):
 
 	print 'if shelf and image.shelf are the same'
 	print shelf == im.shelf
+
 
 def diagnostics0(imgs, im, shelf):
 	print '\n'
@@ -1173,6 +1102,7 @@ def diagnostics0(imgs, im, shelf):
 	for i in imgs:
 		print i.image
 
+
 # get user name:
 def GetUserName():
     '''
@@ -1192,5 +1122,5 @@ def GetUserName():
         user = dialogInfo[0]
     else:
         user = 'Anonymous' + str(randint(0, 1000))
-   
+
     return user
