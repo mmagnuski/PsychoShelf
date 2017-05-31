@@ -932,11 +932,9 @@ def createstims(win, trial, lc=[-300, -250], rev_shelf=False):
 	imgs = DragImList(trial['img_list'], win=win, shelf=shelf)
 
 	# create text object:
-	instr = visual.TextStim(
-		win, 
-		text = trial['instruct'], 
-		pos = [0, 245],
-		height = 25)
+	text_y_pos = int((screen_size[1] / 2.) * 0.7)
+	instr = visual.TextStim(win, text=trial['instruct'], pos=[0, text_y_pos],
+							height=25)
 
 	# create backgroud image:
 	bckg  = []
