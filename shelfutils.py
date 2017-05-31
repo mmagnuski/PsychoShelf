@@ -804,18 +804,19 @@ def run_tutorial(trial, exp, win, mouse):
 	del trial2
 
 
-	# instr 4 
+	# instr 4
 	# -------
 
 	# clear buffer
 	m1, m2, m3 = mouse.getPressed()
 	# setup
 	instr.setText(trial['instruct' + str(4)])
+	instr.setPos(orig_inst_pos)
 	instrback = addback(win, instr, op = 0.7)
 	timer = core.CountdownTimer(1.5)
-	
+
 	while True:
-		drawstims(bckg, shelf, dragged, 
+		drawstims(bckg, shelf, dragged,
 			win, noflip = True)
 		instrback.draw()
 		instr.draw()
@@ -899,12 +900,12 @@ def run_tutorial(trial, exp, win, mouse):
 		m1, m2, m3 = mouse.getPressed()
 		# setup
 		instr.setText(trial['instruct' + str(i)])
-		instr.pos = [0, 245]
+		instr.setPos(orig_inst_pos)
 		instrback = addback(win, instr, op = 0.85)
 		timer = core.CountdownTimer(1.5)
 
 		while True:
-			drawstims(bckg, shelf, dragged, 
+			drawstims(bckg, shelf, dragged,
 				win, noflip = True)
 			instrback.draw()
 			instr.draw()
