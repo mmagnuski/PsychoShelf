@@ -33,7 +33,7 @@ mouse = event.Mouse()
 trials = sh.read_all_trials(exp)
 
 # create dataframe to hold results
-colNames = ['orderPresented', 'objMoved', 'movedTo', 
+colNames = ['orderPresented', 'objMoved', 'movedTo',
 			'isCorrect', 'pickRT', 'pick2dropTime',
 			'startMousePos', 'pickMousePos', 'dropMousePos']
 db = pd.DataFrame(index = np.arange(1, exp['numTrials'] + 1), \
@@ -70,5 +70,4 @@ for t in tri:
 	sh.run_trial(trials[t-1], exp, win, mouse, db)
 	core.wait(0.5)
 
-# at the end - quit
 core.quit()
