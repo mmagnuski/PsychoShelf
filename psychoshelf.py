@@ -11,11 +11,6 @@ print 'imports finished'
 doTutorial = True
 doFirstFour = True
 
-# create window, get mouse
-win   = visual.Window([800, 600], units = 'pix')
-# , winType = 'pygame'  - pygame not installed or not fully working
-mouse = event.Mouse()
-
 # exp data and dataframe
 exp = {}
 # check script path
@@ -27,6 +22,12 @@ if not op.exists(beh_dir):
 	os.mkdir(beh_dir)
 
 exp['participant'] = sh.GetUserName()
+
+
+# create window, get mouse
+win   = visual.Window(monitor='testMonitor', units = 'pix', fullscr=True)
+# , winType = 'pygame'  - pygame not installed or not fully working
+mouse = event.Mouse()
 
 # read in all trials:
 trials = sh.read_all_trials(exp)
