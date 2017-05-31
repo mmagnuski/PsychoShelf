@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from   psychopy   import visual, event, core
 import os
+import os.path as op
 import numpy        as   np
 import pandas       as   pd
 import shelfutils   as   sh
@@ -18,8 +19,13 @@ mouse = event.Mouse()
 # exp data and dataframe
 exp = {}
 # check script path
-exp['pth'] = os.path.dirname(os.path.abspath(__file__))
-# CHANGE:
+exp['pth'] = op.dirname(os.path.abspath(__file__))
+
+# make sure behdata exists
+beh_dir = op.join(exp['pth'], 'behdata')
+if not op.exists(beh_dir):
+	os.mkdir(beh_dir)
+
 exp['participant'] = sh.GetUserName()
 
 # read in all trials:
