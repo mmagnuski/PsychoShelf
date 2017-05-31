@@ -1029,11 +1029,12 @@ def shape(win, vert, col, lw = 1.5, op = 1):
 def addback(win, instr, lim=15, op=0.5):
 	# get instr position
 	pos = instr.pos
+	screen_size = win.size
 
 	# if goes above screen - correct:
-	h = int(instr.height / 2) + lim
-	w = int(instr.width / 2) + lim
-	dst = 300 - (pos[1] + h)
+	h = int(instr._fontHeightPix / 2.) + lim
+	w = int(instr.width / 2.) + lim
+	dst = int(screen_size[1] / 2.) - (pos[1] + h)
 	if dst < 0:
 		pos[1] = pos[1] + dst
 		instr.setPos(pos)
